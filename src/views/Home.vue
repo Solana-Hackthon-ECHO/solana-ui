@@ -204,6 +204,10 @@ export default {
   created: function () {
     let vm = this;
     vm.getTransactionCount();
+
+    setInterval(function () {
+      vm.getTransactionCount();
+    }, 5000);
   }
 };
 </script>
