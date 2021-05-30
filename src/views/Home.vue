@@ -63,6 +63,8 @@
             </v-btn>
           </v-col>
 
+          <v-btn @click="createToken"> create token </v-btn>
+
           <v-col cols="0" md="2"></v-col>
         </v-row>
       </v-container>
@@ -71,6 +73,7 @@
 </template>
 
 <script>
+import { createToken } from "@/common/spl-token.js";
 import axios from "axios";
 import anime from "animejs";
 
@@ -81,12 +84,12 @@ export default {
   data: () => ({
     //
     backgroundStyle: {
-      backgroundColor: "black",
+      backgroundColor: "black"
     },
     //
     transactionCount: 0,
     balance: 0,
-    fees: 0,
+    fees: 0
   }),
   methods: {
     render(path_url) {
@@ -101,13 +104,13 @@ export default {
           {
             jsonrpc: "2.0",
             id: 1,
-            method: "getTransactionCount",
+            method: "getTransactionCount"
           },
           {
             headers: {
               "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-            },
+              "Access-Control-Allow-Origin": "*"
+            }
           }
         );
 
@@ -130,13 +133,13 @@ export default {
             jsonrpc: "2.0",
             id: 1,
             method: "getBalance",
-            params: [""],
+            params: [""]
           },
           {
             headers: {
               "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-            },
+              "Access-Control-Allow-Origin": "*"
+            }
           }
         );
 
@@ -155,13 +158,13 @@ export default {
           {
             jsonrpc: "2.0",
             id: 1,
-            method: "getFees",
+            method: "getFees"
           },
           {
             headers: {
               "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-            },
+              "Access-Control-Allow-Origin": "*"
+            }
           }
         );
 
@@ -190,18 +193,18 @@ export default {
         easing: "linear",
         update: () => {
           this.transactionCount = obj.n;
-        },
+        }
       });
     },
+
+    async createToken() {
+      await createToken();
+    }
   },
   created: function () {
     let vm = this;
     vm.getTransactionCount();
-
-    setInterval(function () {
-      vm.getTransactionCount();
-    }, 5000);
-  },
+  }
 };
 </script>
 
