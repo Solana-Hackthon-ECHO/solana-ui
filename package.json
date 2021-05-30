@@ -8,6 +8,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@solana/spl-token": "^0.1.5",
+    "@solana/web3.js": "^1.15.0",
     "animejs": "^3.2.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
