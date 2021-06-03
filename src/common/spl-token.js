@@ -31,9 +31,8 @@ export async function createToken() {
         TOKEN_PROGRAM_ID
     );
 
-    let testAccountOwner = Keypair.generate();
     let testAccount = await testToken.createAccount(
-        testAccountOwner.publicKey
+        new PublicKey("A1Q2BwEEGVDVq5FvuzrFpUux53MJ18uWRswngkPXotT9")
     );
     await testToken.mintTo(testAccount, testMintAuthority, [], 1);
     const info = await testToken.getMintInfo();
