@@ -178,7 +178,7 @@
                           white-space: pre-line;
                         "
                       >
-                        {{ "YOUR PUBLIC-KEY: " + publickey }}
+                        {{ "YOUR PUBLIC-KEY: " + walletPubKey }}
                       </p>
                     </v-col>
                     <v-col cols="12">
@@ -203,6 +203,7 @@
 
 <script>
 import axios from "axios";
+import { mapGetters } from "vuex";
 import VueHorizontalList from "@/components/vue-horizontal-list.vue";
 import Toolbar from "../components/toolbar.vue";
 
@@ -211,7 +212,7 @@ export default {
 
   components: {
     VueHorizontalList,
-    Toolbar,
+    Toolbar
   },
   data: () => ({
     publickey: "B9kLd4QqKYPH7CkVvknFMqBUURPB9KfxNMFsx7ywC11S",
@@ -219,7 +220,7 @@ export default {
     API_PATH: process.env.VUE_APP_PATH,
     //
     backgroundStyle: {
-      backgroundColor: "black",
+      backgroundColor: "black"
     },
     // activities
     options: {
@@ -227,19 +228,19 @@ export default {
         { end: 576, size: 1 },
         { start: 576, end: 768, size: 2 },
         { start: 768, end: 992, size: 3 },
-        { size: 4 },
+        { size: 4 }
       ],
       list: {
         // 1200 because @media (min-width: 1200px) and therefore I want to switch to windowed mode
         windowed: 1200,
 
         // Because: #app {padding: 80px 24px;}
-        padding: 24,
+        padding: 24
       },
       position: {
-        start: 0,
+        start: 0
       },
-      autoplay: { play: false, repeat: true, speed: 2500 },
+      autoplay: { play: false, repeat: true, speed: 2500 }
     },
     items: [],
 
@@ -251,7 +252,7 @@ export default {
 
     // dialog
     dialog: false,
-    preview_activity: null,
+    preview_activity: null
   }),
   methods: {
     render(path_url) {
@@ -262,8 +263,8 @@ export default {
       try {
         let config = {
           headers: {
-            apikey: "handsomesongchieng",
-          },
+            apikey: "handsomesongchieng"
+          }
         };
 
         let r = await axios.get(this.API_PATH + "api/activities", config);
@@ -288,15 +289,15 @@ export default {
       try {
         let _d = {
           activityId: this.preview_activity.id,
-          participant_address: this.publickey,
+          participant_address: this.publickey
         };
 
         console.log(_d);
 
         let config = {
           headers: {
-            apikey: "handsomesongchieng",
-          },
+            apikey: "handsomesongchieng"
+          }
         };
 
         console.log(_d);
@@ -305,7 +306,7 @@ export default {
         if (r.status == 200) {
           this.$swal({
             icon: "success",
-            title: "SUCCESS",
+            title: "SUCCESS"
           }).then((result) => {
             if (result.isConfirmed) {
               this.$router.go();
@@ -319,10 +320,13 @@ export default {
     submit() {
       // this.$router.push({ "route/"+ this.model});
       this.$router.push("resume/" + this.model);
-    },
+    }
   },
   created: function () {
     this.getActivities();
+  },
+  computed: {
+    ...mapGetters(["walletPubKey"])
   },
   watch: {
     async search() {
@@ -334,8 +338,8 @@ export default {
       try {
         let config = {
           headers: {
-            apikey: "handsomesongchieng",
-          },
+            apikey: "handsomesongchieng"
+          }
         };
 
         let r = await axios.get(this.API_PATH + "api/participants", config);
@@ -350,7 +354,7 @@ export default {
       } catch (e) {
         console.log(e);
       }
-    },
-  },
+    }
+  }
 };
 </script>

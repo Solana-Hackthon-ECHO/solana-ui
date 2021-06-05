@@ -18,8 +18,8 @@
       <v-btn plain text @click="render('create')">
         <span>Create Activities</span>
       </v-btn>
-      <v-btn plain text @click="render('')">
-        <span>Connect Wallet</span>
+      <v-btn plain text @click="getProvider">
+        <span>{{ isConnected ? "Wallet Connected" : "Connect Wallet" }}</span>
       </v-btn>
     </v-toolbar>
   </div>
@@ -29,13 +29,41 @@
 export default {
   name: "toolbar",
 
-  data: () => ({}),
+  data: () => ({
+    isConnected: false
+  }),
   methods: {
     render(path_url) {
       console.log(path_url);
       this.$router.push({ name: path_url });
     },
+    async getProvider() {
+      if (window.solana) {
+        const vm = this;
+        if (window.solana.isPhantom) {
+          window.solana.on("connect", async () => {
+            console.log(
+              "Connected to wallet " + window.solana.publicKey.toBase58()
+            );
+            vm.isConnected = true;
+            vm.$store.commit(
+              "setWalletPubKey",
+              window.solana.publicKey.toBase58()
+            );
+          });
+          window.solana.on("disconnect", () => {
+            console.log("Disconnected from wallet");
+            vm.isConnected = false;
+          });
+          // try to eagerly connect
+          window.solana.connect(/**{ onlyIfTrusted: true }**/);
+          return () => {
+            window.solana.disconnect();
+          };
+        }
+      }
+    }
   },
-  created: function () {},
+  created: function () {}
 };
 </script>
