@@ -1,5 +1,5 @@
 <template>
-  <div :style="backgroundStyle">
+  <div>
     <v-card
       height="100vh"
       img="https://solana.com/static/af80cf3bd48b742194ce88fc8d64ae4c/89126/CoverTrans.avif"
@@ -83,10 +83,6 @@ export default {
 
   components: {},
   data: () => ({
-    //
-    backgroundStyle: {
-      backgroundColor: "black",
-    },
     //
     transactionCount: 0,
     balance: 0,

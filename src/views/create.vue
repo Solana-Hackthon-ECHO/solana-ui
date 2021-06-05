@@ -1,36 +1,27 @@
 <template>
-  <div :style="backgroundStyle">
-    <v-card
-      height="100vh"
-      img="https://solana.com/static/af80cf3bd48b742194ce88fc8d64ae4c/89126/CoverTrans.avif"
-    >
-      <Toolbar></Toolbar>
+  <div>
+    <Toolbar></Toolbar>
 
-      <v-container fluid>
-        <v-row>
-          <v-col cols="0" md="2"></v-col>
+    <v-container fluid>
+      <v-row>
+        <v-col cols="0" md="2"></v-col>
 
-          <!-- real Stuff -->
-          <v-col
-            cols="12"
-            md="8"
-            class="text-end"
-            style="
-              position: fixed;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-            "
-          >
-            <v-card
-              class="mx-auto"
-              max-width="344"
-              color="rgb(255,255,251,0.1)"
-              dark
-            >
-              <v-card-text>
-                <v-form ref="form" v-model="valid" lazy-validation>
-                  <!-- <v-select
+        <!-- real Stuff -->
+        <v-col
+          cols="12"
+          md="8"
+          class="text-end"
+          style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          "
+        >
+          <v-card class="mx-auto" max-width="344" color="rgb(255,255,251,0.1)">
+            <v-card-text>
+              <v-form ref="form" v-model="valid" lazy-validation>
+                <!-- <v-select
                     :items="activities"
                     label="PLEASE ENTER ACTIVITIES"
                     v-model="activity"
@@ -39,48 +30,51 @@
                     prepend-icon="mdi-map-marker-plus"
                   ></v-select> -->
 
-                  <v-text-field
-                    label="PLEASE ENTER TOPIC"
-                    v-model="topic"
-                    :rules="Rules"
-                    required
-                    prepend-icon="mdi-content-paste"
-                  ></v-text-field>
+                <v-text-field
+                  label="PLEASE ENTER TOPIC"
+                  v-model="topic"
+                  :rules="Rules"
+                  required
+                  prepend-icon="mdi-content-paste"
+                ></v-text-field>
 
-                  <v-textarea
-                    label="PLEASE ENTER CONTENT"
-                    v-model="content"
-                    :rules="Rules"
-                    required
-                    prepend-icon="mdi-table-of-contents"
-                  ></v-textarea>
-                </v-form>
+                <v-textarea
+                  label="PLEASE ENTER CONTENT"
+                  v-model="content"
+                  :rules="Rules"
+                  required
+                  prepend-icon="mdi-table-of-contents"
+                ></v-textarea>
+              </v-form>
 
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn width="50%" outlined rounded @click="preview()">
-                    PREVIEW
-                  </v-btn>
-                  <v-btn width="50%" outlined rounded @click="submit()">
-                    SUBMIT
-                  </v-btn>
-                </v-card-actions>
-              </v-card-text>
-            </v-card>
-          </v-col>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn width="50%" outlined rounded @click="preview()">
+                  PREVIEW
+                </v-btn>
+                <v-btn width="50%" outlined rounded @click="submit()">
+                  SUBMIT
+                </v-btn>
+              </v-card-actions>
+            </v-card-text>
+          </v-card>
+        </v-col>
 
-          <v-col cols="0" md="2"></v-col>
-        </v-row>
-      </v-container>
-    </v-card>
+        <v-col cols="0" md="2"></v-col>
+      </v-row>
+    </v-container>
 
     <!-- dialog -->
     <v-dialog max-width="800px" v-model="dialog" content-class="vdialognew">
       <v-container fill-height fluid>
         <v-row align="center" justify="center" style="text-align: center">
           <v-col cols="12" style="padding: 0px">
-            <v-card width="100vw" height="80vh" style="background: black">
-              <div style="height: 80vh; background: rgb(0, 0, 0, 0.8)">
+            <v-img
+              width="100vw"
+              height="80vh"
+              :src="require('@/assets/photo1.png')"
+            >
+              <div style="height: 80vh; background: rgb(0, 0, 0, 0.5)">
                 <v-container fill-height fluid>
                   <v-row
                     align="center"
@@ -88,7 +82,7 @@
                     style="text-align: center"
                   >
                     <v-col cols="12">
-                      <p style="font-size: 2em; color: white">
+                      <p style="font-size: 2em; color: #dfdfdf">
                         {{ topic }}
                       </p>
                     </v-col>
@@ -96,7 +90,7 @@
                       <p
                         style="
                           font-size: 1em;
-                          color: white;
+                          color: #dfdfdf;
                           white-space: pre-line;
                         "
                       >
@@ -111,7 +105,7 @@
                   </v-row>
                 </v-container>
               </div>
-            </v-card>
+            </v-img>
           </v-col>
         </v-row>
       </v-container>
@@ -132,11 +126,6 @@ export default {
   data: () => ({
     //
     API_PATH: process.env.VUE_APP_PATH,
-
-    //
-    backgroundStyle: {
-      backgroundColor: "black",
-    },
 
     activities: ["test1", "test2", "test3"],
     activity: null,

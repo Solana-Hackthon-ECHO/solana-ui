@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app style="background: #f1e5d7" id="inspire">
     <v-main>
       <router-view />
     </v-main>

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <v-toolbar class="elevation-0" color="rgb(255,255,255,0)" dark>
+    <v-toolbar class="elevation-0" color="rgb(255,255,255,0)">
       <a @click="render('Home')">
         <v-img
           class="mx-2"
-          src="@/assets/logo.svg"
+          src="@/assets/logo.png"
           max-height="120"
           max-width="150"
           contain
@@ -30,7 +30,7 @@ export default {
   name: "toolbar",
 
   data: () => ({
-    isConnected: false
+    isConnected: false,
   }),
   methods: {
     render(path_url) {
@@ -62,8 +62,8 @@ export default {
           };
         }
       }
-    }
+    },
   },
-  created: function () {}
+  created: function () {},
 };
 </script>
