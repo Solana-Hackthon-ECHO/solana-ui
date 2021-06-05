@@ -2,7 +2,7 @@ import axios from "axios";
 import {
     Account,
     Connection,
-
+    PublicKey,
     LAMPORTS_PER_SOL,
     Keypair
 } from "@solana/web3.js";
@@ -11,7 +11,7 @@ import { Token, TOKEN_PROGRAM_ID, } from "@solana/spl-token";
 const rpcUrl = "https://devnet.solana.com";
 let connection = new Connection(rpcUrl, "confirmed");
 
-export async function createToken() {
+export async function createToken(address) {
     const payer = new Account();
     const signature = await connection.requestAirdrop(
         payer.publicKey,
@@ -21,23 +21,27 @@ export async function createToken() {
     console.log(`Account created: ${payer.publicKey.toBase58()}`);
     console.log(`Account's Balance: ${(await connection.getBalance(payer.publicKey)) / LAMPORTS_PER_SOL}`);
 
+    console.log(address)
+
     let testMintAuthority = Keypair.generate();
     const testToken = await Token.createMint(
         connection,
         payer,
         testMintAuthority.publicKey,
         testMintAuthority.publicKey,
-        1,
+        0,
         TOKEN_PROGRAM_ID
     );
 
     let testAccount = await testToken.createAccount(
-        new PublicKey("A1Q2BwEEGVDVq5FvuzrFpUux53MJ18uWRswngkPXotT9")
+        new PublicKey(address)
     );
     await testToken.mintTo(testAccount, testMintAuthority, [], 1);
     const info = await testToken.getMintInfo();
     console.log(testToken.publicKey.toBase58());
     console.log(info.supply.toNumber());
+
+    return testToken.publicKey.toBase58();
 }
 
 export const ipfs = {

@@ -8,56 +8,29 @@
 
       <v-container fluid>
         <v-row>
-          <v-col cols="0" md="1"></v-col>
+          <v-col cols="0" md="2"></v-col>
 
-          <v-col
-            cols="12"
-            md="8"
-            style="
-              position: fixed;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-            "
-          >
-            <v-card
-              class="mx-auto"
-              max-width="100%"
-              color="rgb(255,255,251,0.1)"
-              dark
-            >
-              <v-card-text>
-                <v-row>
-                  <v-col>
-                    <p class="text">Name</p>
-                    <p class="focus">GREENHOPE</p>
-                  </v-col>
-                  <v-col>
-                    <p class="text">Wallet Balance</p>
-                    <p class="focus">{{ balance.toLocaleString() }}</p>
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-
-            <br />
-
-            <v-card-text>
-              <v-layout align-center justify-center>
-                <v-row :key="i" v-for="i in Math.ceil(proofs.length / 3)">
-                  <v-col cols="12" md="4" :key="j" v-for="j in 3">
-                    <v-img
-                      width="50vw"
-                      :src="proofs[i * 3 - (3 - j) - 1].photo"
-                    >
-                    </v-img>
-                  </v-col>
-                </v-row>
-              </v-layout>
-            </v-card-text>
+          <v-col cols="12" md="8" class="text-end" v-if="items.length != 0">
+            <v-row :key="i" v-for="i in Math.ceil(items.length / 3)">
+              <v-col cols="12" md="4" :key="j" v-for="j in 3" class="text-end">
+                <div v-if="3 * i + j - 4 < items.length">
+                  <!-- <v-container fill-height fluid>
+                    <v-row
+                      align="center"
+                      justify="center"
+                      style="text-align: center"
+                    > -->
+                  <strong style="color: white">{{
+                    items[3 * i + j - 4].token_address
+                  }}</strong>
+                  <!-- </v-row>
+                  </v-container> -->
+                </div>
+              </v-col>
+            </v-row>
           </v-col>
 
-          <v-col cols="0" md="1"></v-col>
+          <v-col cols="0" md="2"></v-col>
         </v-row>
       </v-container>
     </v-card>
@@ -76,54 +49,40 @@ export default {
   },
   data: () => ({
     //
+    API_PATH: process.env.VUE_APP_PATH,
+    //
     backgroundStyle: {
       backgroundColor: "black",
     },
     //
-    balance: 0,
-    // proofs
-    proofs: [
-      {
-        topic: "test1",
-        content: "content1",
-        photo:
-          "https://www.ilo.org/wcmsp5/groups/public/---dgreports/---dcomm/documents/image/wcms_793467.jpg",
-      },
-      {
-        topic: "test2",
-        content: "content2",
-        photo:
-          "https://www.ilo.org/wcmsp5/groups/public/---dgreports/---dcomm/documents/image/wcms_793467.jpg",
-      },
-      {
-        topic: "test3",
-        content: "content3",
-        photo:
-          "https://www.ilo.org/wcmsp5/groups/public/---dgreports/---dcomm/documents/image/wcms_793467.jpg",
-      },
-    ],
+    items: [],
   }),
   methods: {
-    async getBalance() {
+    async getPersonToken() {
       try {
-        const r = await axios.post(
-          "http://devnet.solana.com",
-          {
-            jsonrpc: "2.0",
-            id: 1,
-            method: "getBalance",
-            params: ["8TYFkKF8tZ5iPhWKuZsqnUsh5SAayDv22M4exd9FqeRg"],
+        let participant = this.$route.path.split("/");
+        let config = {
+          headers: {
+            apikey: "handsomesongchieng",
           },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-            },
-          }
+        };
+
+        console.log(participant[2]);
+
+        let r = await axios.get(
+          this.API_PATH + "api/tokens_activity/participant/" + participant[2],
+          config
         );
 
+        console.log(
+          this.API_PATH + "api/tokens_activity/participant/" + participant[2]
+        );
+        console.log(r.data);
+
         if (r.status == 200) {
-          this.balance = r.data.result.value;
+          if (r.data.result.length > 0) {
+            this.items = r.data.result;
+          }
         }
       } catch (e) {
         console.log(e);
@@ -131,20 +90,10 @@ export default {
     },
   },
   created: function () {
-    this.getBalance();
+    this.getPersonToken();
   },
 };
 </script>
 
 <style>
-.focus {
-  color: palevioletred;
-  font-size: 2em;
-  font-weight: bold;
-}
-
-.text {
-  color: white;
-  font-size: 1.2em;
-}
 </style>

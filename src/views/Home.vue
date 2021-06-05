@@ -170,6 +170,18 @@
                       </p>
                     </v-col>
                     <v-col cols="12">
+                      <p
+                        style="
+                          background: rgba(255, 255, 251, 0.5);
+                          font-size: 1em;
+                          color: white;
+                          white-space: pre-line;
+                        "
+                      >
+                        {{ "YOUR PUBLIC-KEY: " + publickey }}
+                      </p>
+                    </v-col>
+                    <v-col cols="12">
                       <v-btn
                         style="width: 50%; height: 45px"
                         depressed
@@ -202,6 +214,7 @@ export default {
     Toolbar,
   },
   data: () => ({
+    publickey: "B9kLd4QqKYPH7CkVvknFMqBUURPB9KfxNMFsx7ywC11S",
     //
     API_PATH: process.env.VUE_APP_PATH,
     //
@@ -271,16 +284,41 @@ export default {
       console.log(item);
       this.preview_activity = item;
     },
-    join() {
-      alert("SEND YOUR PUBLIC KEY TO ME");
-    },
-    submit(model) {
-      if (model !== null) {
-        alert("GET " + model + "'s RESUME");
-        this.$router.push({ name: "resume" });
-      } else {
-        alert("FUCK OFF");
+    async join() {
+      try {
+        let _d = {
+          activityId: this.preview_activity.id,
+          participant_address: this.publickey,
+        };
+
+        console.log(_d);
+
+        let config = {
+          headers: {
+            apikey: "handsomesongchieng",
+          },
+        };
+
+        console.log(_d);
+
+        let r = await axios.post(this.API_PATH + "api/participant", _d, config);
+        if (r.status == 200) {
+          this.$swal({
+            icon: "success",
+            title: "SUCCESS",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.go();
+            }
+          });
+        }
+      } catch (e) {
+        console.log(e);
       }
+    },
+    submit() {
+      // this.$router.push({ "route/"+ this.model});
+      this.$router.push("resume/" + this.model);
     },
   },
   created: function () {
@@ -304,7 +342,6 @@ export default {
         if (r.status == 200) {
           if (r.data.result.length > 0) {
             this.search_items = r.data.result;
-            // Object.values(list).map(item => item.name);
             this.isLoading = false;
           }
         }

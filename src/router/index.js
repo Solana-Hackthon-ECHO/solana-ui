@@ -20,7 +20,7 @@ const routes = [
     component: () => import("@/views/manage")
   },
   {
-    path: '/resume',
+    path: '/resume/:address',
     name: 'resume',
     component: () => import("@/views/resume")
   },

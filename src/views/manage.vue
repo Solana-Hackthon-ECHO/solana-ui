@@ -29,10 +29,10 @@
                   <strong style="color: white">{{
                     items[3 * i + j - 4].title
                   }}</strong>
-                  <br />
-                  <span style="color: white">{{
+                  <!-- <br /> -->
+                  <!-- <span style="color: white">{{
                     items[3 * i + j - 4].content
-                  }}</span>
+                  }}</span> -->
                 </div>
               </v-col>
             </v-row>
@@ -72,7 +72,7 @@
               @page-count="PageCount = $event"
             >
               <template v-slot:item.sent="{ item }">
-                <div v-if="item.sent === false">
+                <div v-if="item.token_address.length === 0">
                   <v-btn outlined rounded @click="send(item)">
                     <span>SEND NTF TOKEN </span>
                   </v-btn>
@@ -99,6 +99,7 @@
 <script>
 import axios from "axios";
 import Toolbar from "../components/toolbar.vue";
+import { createToken } from "@/common/spl-token.js";
 
 export default {
   name: "Home",
@@ -161,6 +162,7 @@ export default {
     async preview(id) {
       this.dialog = true;
       this.id = id;
+      this.preview_participant = null;
 
       try {
         let config = {
@@ -183,48 +185,43 @@ export default {
       } catch (e) {
         console.log(e);
       }
-
-      // this.preview_participant = [
-      //   { participant_address: "public-key1", sent: false },
-      //   { participant_address: "public-key2", sent: false },
-      //   { participant_address: "public-key3", sent: true },
-      //   { participant_address: "public-key3", sent: true },
-      //   { participant_address: "public-key3", sent: false },
-      //   { participant_address: "public-key3", sent: false },
-      // ];
     },
-    send(item) {
+    async send(item) {
       try {
+        let token = await createToken(
+          "B9kLd4QqKYPH7CkVvknFMqBUURPB9KfxNMFsx7ywC11S"
+        );
+        console.log(token);
+
         let _d = {
-          activityId: this.id,
-          token_address: item.token_address,
+          activityId: item.activityId,
+          token_address: token,
+          participant_address: item.participant_address,
         };
 
         let config = {
-          method: "post",
-          data: _d,
-          url: "https://solana-hackthon-api.herokuapp.com/api/tokens_activity",
           headers: {
             apikey: "handsomesongchieng",
           },
         };
 
-        axios(config)
-          .then(function (r) {
-            if (r.status == 200) {
-              this.$swal({
-                icon: "success",
-                title: "SUCCESS",
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  this.$router.go();
-                }
-              });
+        console.log(_d);
+
+        let r = await axios.post(
+          this.API_PATH + "api/tokens_activity",
+          _d,
+          config
+        );
+        if (r.status == 200) {
+          this.$swal({
+            icon: "success",
+            title: "更新成功",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.go();
             }
-          })
-          .catch(function (error) {
-            console.log(error);
           });
+        }
       } catch (e) {
         console.log(e);
       }
