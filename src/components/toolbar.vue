@@ -61,6 +61,15 @@ export default {
             window.solana.disconnect();
           };
         }
+      } else {
+        this.$swal({
+          icon: "error",
+          title: "PLEASE INSTALL PHANTOM",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.open("https://phantom.app/");
+          }
+        });
       }
     },
   },

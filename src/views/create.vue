@@ -167,7 +167,7 @@ export default {
         if (r.status == 200) {
           this.$swal({
             icon: "success",
-            title: "更新成功",
+            title: "SUCCESS",
           }).then((result) => {
             if (result.isConfirmed) {
               this.$router.go();

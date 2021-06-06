@@ -302,7 +302,7 @@ export default {
       try {
         let _d = {
           activityId: this.preview_activity.id,
-          participant_address: this.publickey,
+          participant_address: this.walletPubKey,
         };
 
         console.log(_d);
